@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>hw2</title>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<style type="text/css">
+	thead{
+		font-weight: 700;
+	}
+	table {
+    border-collapse: collapse;
+	}
+	table, th, td, caption {
+    border: 1px solid black;
+	}
+	tr:hover{
+		background-color: #bdcebf;
+	}
+	tr:nth-of-type(odd) { 
+		background: #eee; 
+	}
+</style>
+</head>
+<body>
+
+<h1></h1>
+<p></p>
+
+<script>
+	var url="https://birulik.github.io/ITMO/hw2/countries_2012.json"
+      d3.json(url, function(error, data){
+
+      	var isAscending = true;
+        
+        var columns = Object.keys(data[0]);
+        console.log(columns);
+
+        var table = d3.select("body").append("table"),
+          thead = table.append("thead")
+                       .attr("class", "thead");
+          tbody = table.append("tbody");
+
+        table.append("caption")
+          .html("World Countries Ranking");
+
+        thead.append("tr").selectAll("th")
+          .data(columns)
+        .enter()
+          .append("th")
+          .text(function(d) { return d; })
+          .on("click", function(header, i) {
+            if (isAscending) {
+          	 tbody.selectAll("tr").sort(function(a, b) {
+              return d3.descending(a[header], b[header]);
+            });
+              isAscending = false;
+            } else {
+              tbody.selectAll("tr").sort(function(a, b) {
+              return d3.ascending(a[header], b[header]);
+            });
+            	isAscending = true;
+            }
+          });
+
+        var rows = tbody.selectAll("tr.row")
+          .data(data)
+          .enter()
+          .append("tr").attr("class", "row");
+
+        var cells = rows.selectAll("td")
+          .data(function(row) {
+              return d3.range(Object.keys(row).length).map(function(column, i) {
+                  return row[Object.keys(row)[i]];
+              });
+          })
+          .enter()
+          .append("td")
+          .text(function(d) { return d; })
+
+      });
+    </script> 
+</body>
+</html>
