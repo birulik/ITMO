@@ -29,12 +29,14 @@
 <script>
 	var url="https://birulik.github.io/ITMO/hw2/countries_2012.json"
       d3.json(url, function(error, data){
-
+  
       	var isAscending = true;
         
         var columns = Object.keys(data[0]);
-        console.log(columns);
-
+        //columns=columns.splice(1, 2, 4, 7, 8);
+				
+				console.log(columns);
+        
         var table = d3.select("body").append("table"),
           thead = table.append("thead")
                        .attr("class", "thead");
@@ -75,7 +77,27 @@
           })
           .enter()
           .append("td")
-          .text(function(d) { return d; })
+          .text(function(d, i) {
+          	switch(i) {
+          		case 2:
+          			return d3.format(".2s")(d);
+          			break;
+          		case 3:
+          			return d3.format(".1f")(d);
+          			break;
+          		case 4:
+          			return d3.format(".1f")(d);
+          			break;
+          		case 5:
+          			return d3.format(".1f")(d);
+          			break;
+          		case 7:
+          			return d3.format(",")(d);
+          			break;
+          		default:
+          			return d;
+          	}
+           })
 
       });
     </script> 
