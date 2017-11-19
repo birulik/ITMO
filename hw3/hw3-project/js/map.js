@@ -1,4 +1,3 @@
-import json from "../data/world.json";
 /** Class implementing the map view. */
 class Map {
     /**
@@ -6,8 +5,6 @@ class Map {
      */
     constructor() {
         this.projection = d3.geoConicConformal().scale(150).translate([400, 350]);
-        this.path = d3.geoPath().projection(this.projection);
-
 
     }
 
@@ -59,10 +56,22 @@ class Map {
      * @param the json data with the shape of all countries
      */
     drawMap(world) {
-        d3.json(json, function(err, data) {
-            d3.select("#map").append("path").attr("d", this.path(data));
-        }
-            )
+
+
+    console.log(world);
+    const path = d3.geoPath()
+        .projection(this.projection);
+    console.log(path);
+
+    // d3.json(world, function(err, geojson) {
+        d3.select('#map')
+            .selectAll('path')
+            .data(topojson.feature(world, world.objects.countries).features)
+            .enter()
+            .append("path")
+            .attr("class", "countries")
+            .attr("d", path);
+    // })
 
         //(note that projection is a class member
         // updateMap() will need it to add the winner/runner_up markers.)
